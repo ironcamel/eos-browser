@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eosjs": "^20.0.0",
+    "handlebars": "^4.3.1",
+    "markdown-it": "^10.0.0",
+    "mustache": "^3.1.0",
+    "node-fetch": "^2.6.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.2"
