@@ -1,14 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { JsonRpc } from 'eosjs';
 import Mustache from 'mustache';
 import MarkdownIt from 'markdown-it';
+
 const md = new MarkdownIt();
 
 class EosClient {
-  api_url = 'https://api.eosnewyork.io';
-  rpc = new JsonRpc(this.api_url);
+  apiUrl = 'https://api.eosnewyork.io';
+
+  rpc = new JsonRpc(this.apiUrl);
+
   abiCache = {};
+
   retryDelay = 1000;
+
   maxRetries = 10;
 
   getPrevBlock = async (block) => {
@@ -16,13 +21,12 @@ class EosClient {
     if (block) {
       blockId = block.previous;
     } else {
-      const { head_block_id } = await this.getInfo();
-      blockId = head_block_id;
+      const info = await this.getInfo();
+      blockId = info.head_block_id;
     }
-    let prevBlock = await this.getBlock(blockId);
+    const prevBlock = await this.getBlock(blockId);
     prevBlock.actions = [];
     this.processBlock(prevBlock);
-    console.log(prevBlock.actions);
     return prevBlock;
   }
 
@@ -30,30 +34,24 @@ class EosClient {
     block.actions = [];
     block.transactions.forEach((t) => {
       if (typeof t.trx === 'object') {
-        const actions = t.trx.transaction.actions;
+        const { actions } = t.trx.transaction;
         block.actions.push(...actions);
       }
     });
   };
 
-  wait = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
+  wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  getInfo = async () => {
-    return this.retry(async () => this.rpc.get_info());
-  };
+  getInfo = async () => this.retry(() => this.rpc.get_info());
 
-  getBlock = async (blockId) => {
-    return this.retry(async () => this.rpc.get_block(blockId));
-  };
+  getBlock = async (blockId) => this.retry(() => this.rpc.get_block(blockId));
 
   getAbi = async (account) => {
     if (this.abiCache[account]) return this.abiCache[account];
     const abi = await this.retry(async () => this.rpc.get_abi(account));
     abi.contracts = {};
     if (abi.abi) {
-      abi.abi.actions.forEach(action => {
+      abi.abi.actions.forEach((action) => {
         abi.contracts[action.name] = action.ricardian_contract;
       });
     }
@@ -64,43 +62,41 @@ class EosClient {
   retry = async (fun) => {
     let numRetries = 0;
     let resource;
-    while(!resource && numRetries < this.maxRetries) {
+    while (!resource && numRetries < this.maxRetries) {
       try {
         resource = await fun();
-      } catch(err) {
+      } catch (err) {
         numRetries++;
-        console.log("ERROR !!!!!!!!! retry: " + numRetries);
+        console.log(`ERROR !!!!!!!!! retry: ${numRetries}`);
         await this.wait(this.retryDelay);
       }
     }
     return resource;
   };
-
 }
 
 const eosClient = new EosClient();
 
 class App extends Component {
-
   state = {
     blocks: [],
   };
 
   totalBlocks = 10;
 
+  componentDidMount() {
+    this.loadData();
+  }
+
   loadData = async () => {
     let blocks = [];
     this.setState({ blocks });
     for (let i = 0; i < this.totalBlocks; i++) {
-      const block = blocks[blocks.length-1];
+      const block = blocks[blocks.length - 1];
       const prevBlock = await eosClient.getPrevBlock(block);
       blocks = [...blocks, prevBlock];
       this.setState({ blocks });
-    };
-  }
-
-  componentDidMount() {
-    this.loadData();
+    }
   }
 
   render() {
@@ -108,24 +104,42 @@ class App extends Component {
     return (
       <div className="container">
         <h1 className="app-title">EOSIO Blockchain Browser</h1>
-        <button className="button" onClick={this.loadData}>LOAD</button>
+        <button type="button" className="button" onClick={this.loadData}>LOAD</button>
         <Blockchain blocks={blocks} totalBlocks={this.totalBlocks} />
       </div>
-    )
+    );
   }
 }
 
 function BlockEntry(props) {
-  let label = <span className="eos-label">{props.label}:</span>;
-  let value = <span className="eos-value">{props.value}</span>;
-  if (props.onClick) {
-    label = <button className="link-button" onClick={props.onClick}>{label}</button>;
-    value = <button className="link-button" onClick={props.onClick}>{value}</button>;
+  const { label, value, onClick } = props;
+  let labelSpan = (
+    <span className="eos-label">
+      {label}
+      :
+    </span>
+  );
+  let valueSpan = (
+    <span className="eos-value">
+      {value}
+    </span>
+  );
+  if (onClick) {
+    labelSpan = (
+      <button type="button" className="link-button" onClick={onClick}>
+        {labelSpan}
+      </button>
+    );
+    valueSpan = (
+      <button type="button" className="link-button" onClick={onClick}>
+        {valueSpan}
+      </button>
+    );
   }
   return (
     <div>
-      <div className="eos-label">{label}</div>
-      {value}
+      <div className="eos-label">{labelSpan}</div>
+      {valueSpan}
     </div>
   );
 }
@@ -142,10 +156,11 @@ class Block extends Component {
   }
 
   handleClick = () => {
-    if (!this.state.showDetails) {
+    const { showDetails } = this.state;
+    if (!showDetails) {
       this.populateDetails();
     }
-    this.setState(state => ({ showDetails: !state.showDetails }));
+    this.setState((state) => ({ showDetails: !state.showDetails }));
   };
 
   renderContract = (contract, data) => {
@@ -159,8 +174,8 @@ class Block extends Component {
   };
 
   populateDetails = async () => {
-    if (this.state.detailsDownloaded) return;
-    const { actions } = this.state;
+    const { actions, detailsDownloaded } = this.state;
+    if (detailsDownloaded) return;
 
     for (let i = 0; i < actions.length; i++) {
       const action = actions[i];
@@ -168,7 +183,7 @@ class Block extends Component {
       const abi = await eosClient.getAbi(action.account);
       const contract = abi.contracts[action.name];
       if (contract) {
-        const newActions = [...this.state.actions];
+        const newActions = [...actions];
         newActions[i].contract = this.renderContract(contract, action.data);
         this.setState({ actions: newActions });
       }
@@ -178,25 +193,28 @@ class Block extends Component {
 
   render() {
     const { block } = this.props;
-    const { showDetails } = this.state;
+    const { actions, showDetails } = this.state;
     let key = 0;
-    const actions = this.state.actions.map(action => (
-        <div className="eos-block" key={key++} >
-          <BlockEntry label="action"  value={action.name} />
-          <BlockEntry label="account" value={action.account} />
-          <BlockEntry label="contract" />
-          <div dangerouslySetInnerHTML={{__html:action.contract}} />
-        </div>
+    /* eslint react/no-danger: "off" */
+    const actionBlocks = actions.map((action) => (
+      <div className="eos-block" key={key++}>
+        <BlockEntry label="action" value={action.name} />
+        <BlockEntry label="account" value={action.account} />
+        <BlockEntry label="contract" />
+        <div dangerouslySetInnerHTML={{ __html: action.contract }} />
+      </div>
     ));
 
     const hideDetailsLink = (
-      <button className="link-button" onClick={this.handleClick}>hide actions</button>
+      <button type="button" className="link-button" onClick={this.handleClick}>
+        hide actions
+      </button>
     );
 
     const details = (
       <div className="eos-details">
         {hideDetailsLink}
-        {actions}
+        {actionBlocks}
         {hideDetailsLink}
       </div>
     );
@@ -204,26 +222,26 @@ class Block extends Component {
     return (
       <div>
         <div className="eos-block">
-          <BlockEntry label="hash"      value={block.id} />
+          <BlockEntry label="hash" value={block.id} />
           <BlockEntry label="timestamp" value={block.timestamp} />
-          <BlockEntry label="actions"   value={block.actions.length} onClick={this.handleClick} />
+          <BlockEntry label="actions" value={block.actions.length} onClick={this.handleClick} />
         </div>
         {showDetails && details}
-        <hr/>
+        <hr />
       </div>
     );
   }
 }
 
 class Blockchain extends Component {
-
   isLoading = (rows) => {
-    return rows.length < this.props.totalBlocks;
+    const { totalBlocks } = this.props;
+    return rows.length < totalBlocks;
   }
 
   render() {
     const { blocks } = this.props;
-    const rows = blocks.map(block => (
+    const rows = blocks.map((block) => (
       <Block block={block} key={block.id} />
     ));
 
@@ -235,7 +253,7 @@ class Blockchain extends Component {
 
     return (
       <div className="eos-blockchain">
-        <hr/>
+        <hr />
         <div>
           {rows}
         </div>
@@ -243,7 +261,6 @@ class Blockchain extends Component {
       </div>
     );
   }
-
 }
 
 export default App;
