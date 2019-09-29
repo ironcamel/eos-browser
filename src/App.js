@@ -108,7 +108,7 @@ class App extends Component {
     return (
       <div className="container">
         <h1 className="app-title">EOSIO Blockchain Browser</h1>
-        <button onClick={this.loadData}>LOAD</button>
+        <button className="button" onClick={this.loadData}>LOAD</button>
         <Blockchain blocks={blocks} totalBlocks={this.totalBlocks} />
       </div>
     )
@@ -116,13 +116,18 @@ class App extends Component {
 }
 
 function BlockEntry(props) {
+  let label = <span className="eos-label">{props.label}:</span>;
   let value = <span className="eos-value">{props.value}</span>;
-  let label = <div className="eos-label">{props.label}:</div>;
   if (props.onClick) {
-    value = <a href="#" onClick={props.onClick}>{value}</a>;
-    label = <a href="#" onClick={props.onClick}>{label}</a>;
+    label = <button className="link-button" onClick={props.onClick}>{label}</button>;
+    value = <button className="link-button" onClick={props.onClick}>{value}</button>;
   }
-  return <div>{label}{value}</div>;
+  return (
+    <div>
+      <div className="eos-label">{label}</div>
+      {value}
+    </div>
+  );
 }
 
 class Block extends Component {
@@ -136,8 +141,7 @@ class Block extends Component {
     };
   }
 
-  handleClick = (e) => {
-    e.preventDefault();
+  handleClick = () => {
     if (!this.state.showDetails) {
       this.populateDetails();
     }
@@ -186,7 +190,7 @@ class Block extends Component {
     ));
 
     const hideDetailsLink = (
-      <a href="#" onClick={this.handleClick}>hide actions</a>
+      <button className="link-button" onClick={this.handleClick}>hide actions</button>
     );
 
     const details = (
@@ -225,14 +229,14 @@ class Blockchain extends Component {
 
     const spinner = (
       <div className="spinner-container">
-        <img className="spinner" src="spinner.gif" />
+        <img alt="spinner" className="spinner" src="spinner.gif" />
       </div>
     );
 
     return (
-      <div>
+      <div className="eos-blockchain">
         <hr/>
-        <div className="eos-blockchain">
+        <div>
           {rows}
         </div>
         {this.isLoading(rows) && spinner}
