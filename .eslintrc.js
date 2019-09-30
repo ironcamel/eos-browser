@@ -30,6 +30,8 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'react/prop-types': 'off',
     'no-continue': 'off',
-    'no-await-in-loop': "off",
+    'no-await-in-loop': 'off',
+    'one-var': 'off',
+    'one-var-declaration-per-line': 'off',
   },
 };
