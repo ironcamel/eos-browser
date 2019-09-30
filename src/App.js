@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { JsonRpc } from 'eosjs';
 import Mustache from 'mustache';
 import MarkdownIt from 'markdown-it';
@@ -42,9 +42,9 @@ class EosClient {
 
   wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  getInfo = async () => this.retry(() => this.rpc.get_info());
+  getInfo = () => this.retry(() => this.rpc.get_info());
 
-  getBlock = async (blockId) => this.retry(() => this.rpc.get_block(blockId));
+  getBlock = (blockId) => this.retry(() => this.rpc.get_block(blockId));
 
   getAbi = async (account) => {
     if (this.abiCache[account]) return this.abiCache[account];
@@ -67,7 +67,7 @@ class EosClient {
         resource = await fun();
       } catch (err) {
         numRetries++;
-        console.log(`ERROR !!!!!!!!! retry: ${numRetries}`);
+        // console.log(`ERROR !!!!!!!!! retry: ${numRetries}`);
         await this.wait(this.retryDelay);
       }
     }
@@ -77,7 +77,7 @@ class EosClient {
 
 const eosClient = new EosClient();
 
-class App extends Component {
+class App extends PureComponent {
   state = {
     blocks: [],
   };
@@ -113,38 +113,38 @@ class App extends Component {
 
 function BlockEntry(props) {
   const { label, value, onClick } = props;
-  let labelSpan = (
+  let labelElem = (
     <span className="eos-label">
       {label}
       :
     </span>
   );
-  let valueSpan = (
+  let valueElem = (
     <span className="eos-value">
       {value}
     </span>
   );
   if (onClick) {
-    labelSpan = (
+    labelElem = (
       <button type="button" className="link-button" onClick={onClick}>
-        {labelSpan}
+        {labelElem}
       </button>
     );
-    valueSpan = (
+    valueElem = (
       <button type="button" className="link-button" onClick={onClick}>
-        {valueSpan}
+        {valueElem}
       </button>
     );
   }
   return (
     <div>
-      <div className="eos-label">{labelSpan}</div>
-      {valueSpan}
+      <div className="eos-label">{labelElem}</div>
+      {valueElem}
     </div>
   );
 }
 
-class Block extends Component {
+class Block extends PureComponent {
   constructor(props) {
     super(props);
     const { block } = this.props;
@@ -195,9 +195,9 @@ class Block extends Component {
     const { block } = this.props;
     const { actions, showDetails } = this.state;
     let key = 0;
-    /* eslint react/no-danger: "off" */
     const actionBlocks = actions.map((action) => (
-      <div className="eos-block" key={key++}>
+      /* eslint react/no-danger: "off" */
+      <div className="eos-block" key={++key}>
         <BlockEntry label="action" value={action.name} />
         <BlockEntry label="account" value={action.account} />
         <BlockEntry label="contract" />
@@ -233,7 +233,7 @@ class Block extends Component {
   }
 }
 
-class Blockchain extends Component {
+class Blockchain extends PureComponent {
   isLoading = (rows) => {
     const { totalBlocks } = this.props;
     return rows.length < totalBlocks;
