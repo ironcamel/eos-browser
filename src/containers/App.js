@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { doneBlocks, receivedBlock, requestBlocks } from './actions';
-import EosClient from './util/eos-client';
-import Blockchain from './components/Blockchain';
+import { doneBlocks, receivedBlock, requestBlocks } from '../actions';
+import EosClient from '../util/eos-client';
+import Blockchain from '../components/Blockchain';
 
 const eosClient = new EosClient();
 
 class App extends Component {
-  totalBlocks = 2;
+  totalBlocks = 10;
 
   componentDidMount() {
     this.loadData();
@@ -31,7 +31,7 @@ class App extends Component {
     const { blocks, blocksById } = this.props;
     return (
       <div className="container">
-        <h1 className="app-title">EOSIO Blockchain Browser</h1>
+        <h1 className="app-title">EOSIO Blockchain</h1>
         <button type="button" className="button" onClick={this.loadData}>LOAD</button>
         <Blockchain
           blocks={blocks}
