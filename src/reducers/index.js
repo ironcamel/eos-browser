@@ -1,6 +1,6 @@
 import {
   REQUEST_BLOCKS, RECEIVED_BLOCK, DONE_FETCHING_BLOCKS,
-  REQUEST_DETAILS, RECEIVED_DETAIL,
+  REQUEST_DETAILS, RECEIVED_DETAIL, TOGGLE_DETAILS,
 } from '../actions';
 
 const initialState = {
@@ -52,6 +52,19 @@ const reducer = (state = initialState, action) => {
         ...oldActions.slice(actionIdx + 1),
       ];
       const block = { ...oldBlock, actions };
+      const blocksById = {
+        ...state.blocksById,
+        [block.id]: block,
+      };
+      return { ...state, blocksById };
+    }
+    case TOGGLE_DETAILS: {
+      const { blockId } = action;
+      const oldBlock = state.blocksById[blockId];
+      const block = {
+        ...oldBlock,
+        showDetails: !oldBlock.showDetails,
+      };
       const blocksById = {
         ...state.blocksById,
         [block.id]: block,

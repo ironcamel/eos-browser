@@ -4,26 +4,19 @@ import Mustache from 'mustache';
 import MarkdownIt from 'markdown-it';
 import BlockEntry from '../components/BlockEntry';
 import EosClient from '../eos-client';
-import { receivedDetail, requestDetails } from '../actions';
+import { receivedDetail, requestDetails, toggleDetails } from '../actions';
 
 const md = new MarkdownIt();
 
 const eosClient = new EosClient();
 
 class Block extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showDetails: false,
-    };
-  }
-
   handleClick = () => {
-    const { showDetails } = this.state;
-    if (!showDetails) {
+    const { block, dispatch } = this.props;
+    if (!block.showDetails) {
       this.populateDetails();
     }
-    this.setState((state) => ({ showDetails: !state.showDetails }));
+    dispatch(toggleDetails(block.id));
   };
 
   renderContract = (contract, data) => {
@@ -57,7 +50,6 @@ class Block extends Component {
 
   render() {
     const { block } = this.props;
-    const { showDetails } = this.state;
     let key = 0;
     const actionBlocks = block.actions.map((action) => (
       /* eslint react/no-danger: "off" */
@@ -90,7 +82,7 @@ class Block extends Component {
           <BlockEntry label="timestamp" value={block.timestamp} />
           <BlockEntry label="actions" value={block.actions.length} onClick={this.handleClick} />
         </div>
-        {showDetails && details}
+        {block.showDetails && details}
         <hr />
       </div>
     );

@@ -3,6 +3,7 @@ export const REQUEST_BLOCKS = 'REQUEST_BLOCKS';
 export const DONE_FETCHING_BLOCKS = 'DONE_FETCHING_BLOCKS';
 export const REQUEST_DETAILS = 'REQUEST_DETAILS';
 export const RECEIVED_DETAIL = 'RECEIVED_DETAIL';
+export const TOGGLE_DETAILS = 'TOGGLE_DETAILS';
 
 export const requestBlocks = () => ({
   type: REQUEST_BLOCKS,
@@ -27,4 +28,9 @@ export const receivedDetail = (blockId, actionIdx, contract) => ({
   blockId,
   actionIdx,
   contract,
+});
+
+export const toggleDetails = (blockId) => ({
+  type: TOGGLE_DETAILS,
+  blockId,
 });
