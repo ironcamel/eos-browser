@@ -1,10 +1,11 @@
 import React from 'react';
 import Block from '../containers/Block';
 
-function Blockchain({ blocks, blocksById, totalBlocks }) {
+function Blockchain(props) {
+  const { blocks, blocksById, totalBlocks, eosClient } = props;
   const isLoading = blocks.length < totalBlocks;
   const rows = blocks.map((id) => (
-    <Block block={blocksById[id]} key={id} />
+    <Block block={blocksById[id]} key={id} eosClient={eosClient} />
   ));
 
   const spinner = (

@@ -34,7 +34,12 @@ class App extends Component {
       <div className="container">
         <h1 className="app-title">EOSIO Blockchain Browser</h1>
         <button type="button" className="button" onClick={this.loadData}>LOAD</button>
-        <Blockchain blocks={blocks} blocksById={blocksById} totalBlocks={this.totalBlocks} />
+        <Blockchain
+          blocks={blocks}
+          blocksById={blocksById}
+          totalBlocks={this.totalBlocks}
+          eosClient={eosClient}
+        />
       </div>
     );
   }

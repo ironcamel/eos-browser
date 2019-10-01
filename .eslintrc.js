@@ -33,5 +33,6 @@ module.exports = {
     'no-await-in-loop': 'off',
     'one-var': 'off',
     'one-var-declaration-per-line': 'off',
+    'object-curly-newline': 'off',
   },
 };
