@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { doneBlocks, receivedBlock, requestBlocks } from './actions';
-import EosClient from './eos-client';
+import EosClient from './util/eos-client';
 import Blockchain from './components/Blockchain';
 
 const eosClient = new EosClient();

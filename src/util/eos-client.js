@@ -1,15 +1,21 @@
 import { JsonRpc } from 'eosjs';
 
 class EosClient {
-  apiUrl = 'https://api.eosnewyork.io';
-
-  rpc = new JsonRpc(this.apiUrl);
-
-  abiCache = {};
-
-  retryDelay = 1000;
-
-  maxRetries = 10;
+  constructor(args = {}) {
+    Object.assign(
+      this,
+      {
+        apiUrl: 'https://api.eosnewyork.io',
+        abiCache: {},
+        retryDelay: 1000,
+        maxRetries: 10,
+      },
+      args,
+    );
+    if (!this.rpc) {
+      this.rpc = new JsonRpc(this.apiUrl);
+    }
+  }
 
   getPrevBlock = async (block) => {
     let blockId;
