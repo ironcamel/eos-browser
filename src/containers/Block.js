@@ -16,7 +16,7 @@ const renderContract = (contract, data) => {
   }
 };
 
-const populateDetails = async (block, eosClient, dispatch) => {
+const populateDetails = async (block, dispatch, eosClient) => {
   const { actions, isFetchingDetails } = block;
   if (isFetchingDetails) return;
 
@@ -34,6 +34,13 @@ const populateDetails = async (block, eosClient, dispatch) => {
   }
 };
 
+const onClick = (block, dispatch, eosClient) => {
+  if (!block.showDetails) {
+    populateDetails(block, dispatch, eosClient);
+  }
+  dispatch(toggleDetails(block.id));
+};
+
 const mapStateToProps = (state, ownProps) => {
   const { blocksById, isFetchingDetails } = state;
   const { block } = ownProps;
@@ -43,11 +50,8 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  loadDetails: (block, eosClient) => {
-    populateDetails(block, eosClient, dispatch);
-  },
-  toggleDetails: (blockId) => dispatch(toggleDetails(blockId)),
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: (block) => onClick(block, dispatch, ownProps.eosClient),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BlockView);

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { doneBlocks, receivedBlock, requestBlocks } from './actions';
 import EosClient from './eos-client';
