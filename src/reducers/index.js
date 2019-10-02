@@ -1,5 +1,5 @@
 import {
-  REQUEST_BLOCKS, RECEIVED_BLOCK, DONE_FETCHING_BLOCKS,
+  REQUEST_BLOCKS, RECEIVED_BLOCK, DONE_FETCHING_BLOCKS, SET_TOTAL_BLOCKS,
   REQUEST_DETAILS, RECEIVED_DETAIL, TOGGLE_DETAILS,
 } from '../actions';
 
@@ -30,6 +30,8 @@ const reducer = (state = initialState, action) => {
     }
     case DONE_FETCHING_BLOCKS:
       return { ...state, isFetchingBlocks: false };
+    case SET_TOTAL_BLOCKS:
+      return { ...state, totalBlocks: action.totalBlocks };
     case REQUEST_DETAILS: {
       const { blockId } = action;
       const block = {

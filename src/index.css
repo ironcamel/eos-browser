@@ -883,5 +883,12 @@ caption {
 
 .button:disabled {
   background-color: gray;
-  border: none;
+  border-color: gray;
+}
+
+select.load {
+  display: inline-block;
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 60px;
 }
