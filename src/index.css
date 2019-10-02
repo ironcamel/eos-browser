@@ -880,3 +880,8 @@ caption {
 .link-button:focus {
   text-decoration: underline;
 }
+
+.button:disabled {
+  background-color: gray;
+  border: none;
+}

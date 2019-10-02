@@ -7,19 +7,17 @@ import Blockchain from '../components/Blockchain';
 const eosClient = new EosClient();
 
 class App extends Component {
-  totalBlocks = 10;
-
   componentDidMount() {
     this.loadData();
   }
 
   loadData = async () => {
-    const { dispatch, isFetchingBlocks } = this.props;
+    const { dispatch, isFetchingBlocks, totalBlocks } = this.props;
     if (isFetchingBlocks) return;
 
     let prevBlock;
     dispatch(requestBlocks());
-    for (let i = 0; i < this.totalBlocks; i++) {
+    for (let i = 0; i < totalBlocks; i++) {
       const block = prevBlock;
       prevBlock = await eosClient.getPrevBlock(block);
       dispatch(receivedBlock(prevBlock));
@@ -28,15 +26,22 @@ class App extends Component {
   }
 
   render() {
-    const { blocks, blocksById } = this.props;
+    const { blocks, blocksById, totalBlocks, isFetchingBlocks } = this.props;
     return (
       <div className="container">
         <h1 className="app-title">EOSIO Blockchain</h1>
-        <button type="button" className="button" onClick={this.loadData}>LOAD</button>
+        <button
+          type="button"
+          className="button"
+          onClick={this.loadData}
+          disabled={isFetchingBlocks}
+        >
+          LOAD
+        </button>
         <Blockchain
           blocks={blocks}
           blocksById={blocksById}
-          totalBlocks={this.totalBlocks}
+          totalBlocks={totalBlocks}
           eosClient={eosClient}
         />
       </div>
@@ -44,9 +49,6 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { blocks, blocksById, isFetchingBlocks } = state;
-  return { blocks, blocksById, isFetchingBlocks };
-};
+const mapStateToProps = (state) => state;
 
 export default connect(mapStateToProps)(App);

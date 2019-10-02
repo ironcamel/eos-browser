@@ -4,6 +4,7 @@ import {
 } from '../actions';
 
 const initialState = {
+  totalBlocks: 10,
   isFetchingBlocks: false,
   blocks: [],
   blocksById: {},
