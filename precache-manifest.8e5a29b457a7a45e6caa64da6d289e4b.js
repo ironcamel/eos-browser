@@ -1,18 +1,18 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a9482d605abe1e5b395b418a2cb41997",
+    "revision": "d771ef0cd2e8a1feb33360e78ff77f8b",
     "url": "/eos-browser/index.html"
   },
   {
-    "revision": "7fc59a02ea2d79e838c6",
-    "url": "/eos-browser/static/css/main.117d5851.chunk.css"
+    "revision": "c8aaf87675af2162d4b5",
+    "url": "/eos-browser/static/css/main.c042810e.chunk.css"
   },
   {
     "revision": "e78cb17de80d17c675c7",
     "url": "/eos-browser/static/js/2.285a4edf.chunk.js"
   },
   {
-    "revision": "7fc59a02ea2d79e838c6",
+    "revision": "c8aaf87675af2162d4b5",
     "url": "/eos-browser/static/js/main.299e45d8.chunk.js"
   },
   {
