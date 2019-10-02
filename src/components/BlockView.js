@@ -6,7 +6,6 @@ function BlockView(props) {
 
   let key = 0;
   const actionBlocks = block.actions.map((action) => (
-    /* eslint react/no-danger: "off" */
     <div className="eos-block" key={++key}>
       <BlockEntry label="action" value={action.name} />
       <BlockEntry label="account" value={action.account} />

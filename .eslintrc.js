@@ -33,6 +33,7 @@ module.exports = {
     'one-var': 'off',
     'react/destructuring-assignment': 'off',
     'react/jsx-filename-extension': 'off',
+    'react/no-danger': 'off',
     'react/prop-types': 'off',
     'react/state-in-constructor': 'off',
   },
