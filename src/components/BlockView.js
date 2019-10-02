@@ -11,7 +11,7 @@ function BlockView(props) {
       <BlockEntry label="action" value={action.name} />
       <BlockEntry label="account" value={action.account} />
       <BlockEntry label="contract" />
-      <div dangerouslySetInnerHTML={{ __html: action.contract }} />
+      <div className="contract" dangerouslySetInnerHTML={{ __html: action.contract }} />
     </div>
   ));
 
