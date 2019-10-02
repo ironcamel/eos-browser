@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { doneBlocks, receivedBlock, requestBlocks, setTotalBlocks } from '../actions';
 import EosClient from '../util/eos-client';
-import Blockchain from '../components/Blockchain';
+import AppView from '../components/AppView';
 
 const eosClient = new EosClient();
 
@@ -38,40 +38,16 @@ class App extends Component {
 
   render() {
     const { blocks, blocksById, totalBlocks, isFetchingBlocks } = this.props;
-    console.log(`render ${totalBlocks} blocks`);
     return (
-      <div className="container">
-        <h1 className="app-title">EOSIO Blockchain</h1>
-        <button
-          type="button"
-          className="button"
-          onClick={this.loadData}
-          disabled={isFetchingBlocks}
-        >
-          LOAD
-        </button>
-        <select
-          value={totalBlocks}
-          onChange={this.setTotalBlocks}
-          disabled={isFetchingBlocks}
-          className="load"
-        >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="25">25</option>
-        </select>
-        blocks
-
-        <Blockchain
-          blocks={blocks}
-          blocksById={blocksById}
-          totalBlocks={totalBlocks}
-          eosClient={eosClient}
-        />
-
-      </div>
+      <AppView
+        blocks={blocks}
+        blocksById={blocksById}
+        eosClient={eosClient}
+        isFetchingBlocks={isFetchingBlocks}
+        loadData={this.loadData}
+        setTotalBlocks={this.setTotalBlocks}
+        totalBlocks={totalBlocks}
+      />
     );
   }
 }
