@@ -844,10 +844,6 @@ caption {
 
 .eos-value {
   font-family: monospace;
-  /*
-  font-family: "Lucida Console", Monaco, monospace;
-  font-family: "Courier New", Courier, monospace;
-  */
 }
 
 .spinner-container {
@@ -891,4 +887,5 @@ select.load {
   margin-left: 20px;
   margin-right: 10px;
   width: 60px;
+  vertical-align: middle;
 }
