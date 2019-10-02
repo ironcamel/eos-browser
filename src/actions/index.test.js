@@ -8,11 +8,10 @@ test('requestBlocks', () => {
 });
 
 test('receivedBlock', () => {
-  const block = { id: 123 };
-  const action = actions.receivedBlock(block);
+  const action = actions.receivedBlock({ id: 123 });
   expect(action).toEqual({
     type: 'RECEIVED_BLOCK',
-    block: block,
+    block: { id: 123 },
   });
 });
 
