@@ -2,16 +2,14 @@ import { JsonRpc } from 'eosjs';
 
 class EosClient {
   constructor(args = {}) {
-    Object.assign(
-      this,
-      {
-        apiUrl: 'https://api.eosnewyork.io',
-        abiCache: {},
-        retryDelay: 1000,
-        maxRetries: 10,
-      },
-      args,
-    );
+    const defaults = {
+      apiUrl: 'https://api.eosnewyork.io',
+      abiCache: {},
+      retryDelay: 1000,
+      maxRetries: 10,
+    };
+    Object.assign(this, defaults, args);
+
     if (!this.rpc) {
       this.rpc = new JsonRpc(this.apiUrl);
     }

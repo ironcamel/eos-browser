@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { doneBlocks, receivedBlock, requestBlocks, setTotalBlocks } from '../actions';
-import EosClient from '../util/eos-client';
 import AppView from '../components/AppView';
-
-const eosClient = new EosClient();
 
 class App extends Component {
   componentDidMount() {
@@ -18,7 +15,7 @@ class App extends Component {
   }
 
   loadData = async () => {
-    const { dispatch, isFetchingBlocks, totalBlocks } = this.props;
+    const { dispatch, isFetchingBlocks, totalBlocks, eosClient } = this.props;
     if (isFetchingBlocks) return;
 
     let prevBlock;
@@ -37,7 +34,7 @@ class App extends Component {
   };
 
   render() {
-    const { blocks, blocksById, totalBlocks, isFetchingBlocks } = this.props;
+    const { blocks, blocksById, totalBlocks, isFetchingBlocks, eosClient } = this.props;
     return (
       <AppView
         blocks={blocks}
