@@ -7,9 +7,10 @@ function AppView(props) {
     blocksById,
     eosClient,
     isFetchingBlocks,
-    loadData,
     setTotalBlocks,
     totalBlocks,
+    requestBlocks,
+    dispatch,
   } = props;
 
   return (
@@ -18,14 +19,14 @@ function AppView(props) {
       <button
         type="button"
         className="button"
-        onClick={loadData}
+        onClick={() => requestBlocks({ ...props, dispatch })}
         disabled={isFetchingBlocks}
       >
         LOAD
       </button>
       <select
         value={totalBlocks}
-        onChange={setTotalBlocks}
+        onChange={(e) => setTotalBlocks(parseInt(e.target.value, 10))}
         disabled={isFetchingBlocks}
         className="load"
       >
@@ -42,8 +43,8 @@ function AppView(props) {
       <Blockchain
         blocks={blocks}
         blocksById={blocksById}
-        totalBlocks={totalBlocks}
         eosClient={eosClient}
+        isFetchingBlocks={isFetchingBlocks}
       />
 
     </div>

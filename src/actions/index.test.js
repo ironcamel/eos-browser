@@ -1,12 +1,5 @@
 import * as actions from '.';
 
-test('requestBlocks', () => {
-  const action = actions.requestBlocks();
-  expect(action).toEqual({
-    type: 'REQUEST_BLOCKS',
-  });
-});
-
 test('receivedBlock', () => {
   const action = actions.receivedBlock({ id: 123 });
   expect(action).toEqual({
@@ -53,5 +46,13 @@ test('setTotalBlocks', () => {
   expect(action).toEqual({
     type: 'SET_TOTAL_BLOCKS',
     totalBlocks: 10,
+  });
+});
+
+test('requestBlocks', () => {
+  const args = { isFetchingBlocks: true };
+  const action = actions.requestBlocks(args);
+  expect(action).toEqual({
+    type: 'REQUEST_BLOCKS',
   });
 });

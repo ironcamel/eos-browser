@@ -6,10 +6,6 @@ export const RECEIVED_DETAIL = 'RECEIVED_DETAIL';
 export const TOGGLE_DETAILS = 'TOGGLE_DETAILS';
 export const SET_TOTAL_BLOCKS = 'SET_TOTAL_BLOCKS';
 
-export const requestBlocks = () => ({
-  type: REQUEST_BLOCKS,
-});
-
 export const receivedBlock = (block) => ({
   type: RECEIVED_BLOCK,
   block,
@@ -40,3 +36,21 @@ export const setTotalBlocks = (totalBlocks) => ({
   type: SET_TOTAL_BLOCKS,
   totalBlocks,
 });
+
+const fetchBlocks = async (args) => {
+  const { dispatch, isFetchingBlocks, totalBlocks, eosClient } = args;
+  if (!isFetchingBlocks) {
+    let prevBlock;
+    for (let i = 0; i < totalBlocks; i++) {
+      const block = prevBlock;
+      prevBlock = await eosClient.getPrevBlock(block);
+      dispatch(receivedBlock(prevBlock));
+    }
+    dispatch(doneBlocks());
+  }
+};
+
+export const requestBlocks = (args) => {
+  fetchBlocks(args);
+  return { type: REQUEST_BLOCKS };
+};

@@ -1,40 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { doneBlocks, receivedBlock, requestBlocks, setTotalBlocks } from '../actions';
+import { bindActionCreators } from 'redux';
+import * as actions from '../actions';
 import AppView from '../components/AppView';
 
 class App extends Component {
   componentDidMount() {
-    this.loadData();
+    const { requestBlocks } = this.props;
+    requestBlocks(this.props);
   }
 
   componentDidUpdate(prevProps) {
+    const { requestBlocks } = this.props;
     if (prevProps.totalBlocks !== this.props.totalBlocks) {
-      this.loadData();
+      requestBlocks(this.props);
     }
   }
 
-  loadData = async () => {
-    const { dispatch, isFetchingBlocks, totalBlocks, eosClient } = this.props;
-    if (isFetchingBlocks) return;
-
-    let prevBlock;
-    dispatch(requestBlocks());
-    for (let i = 0; i < totalBlocks; i++) {
-      const block = prevBlock;
-      prevBlock = await eosClient.getPrevBlock(block);
-      dispatch(receivedBlock(prevBlock));
-    }
-    dispatch(doneBlocks());
-  };
-
-  setTotalBlocks = (event) => {
-    const { dispatch } = this.props;
-    dispatch(setTotalBlocks(event.target.value));
-  };
-
   render() {
-    const { blocks, blocksById, totalBlocks, isFetchingBlocks, eosClient } = this.props;
+    const {
+      blocks,
+      blocksById,
+      totalBlocks,
+      isFetchingBlocks,
+      eosClient,
+      setTotalBlocks,
+      requestBlocks,
+      dispatch,
+    } = this.props;
+
     return (
       <AppView
         blocks={blocks}
@@ -42,8 +36,10 @@ class App extends Component {
         eosClient={eosClient}
         isFetchingBlocks={isFetchingBlocks}
         loadData={this.loadData}
-        setTotalBlocks={this.setTotalBlocks}
+        requestBlocks={requestBlocks}
+        setTotalBlocks={setTotalBlocks}
         totalBlocks={totalBlocks}
+        dispatch={dispatch}
       />
     );
   }
@@ -51,4 +47,15 @@ class App extends Component {
 
 const mapStateToProps = (state) => state;
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  const actionCreators = bindActionCreators(
+    {
+      requestBlocks: actions.requestBlocks,
+      setTotalBlocks: actions.setTotalBlocks,
+    },
+    dispatch,
+  );
+  return { ...actionCreators, dispatch };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

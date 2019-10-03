@@ -2,8 +2,7 @@ import React from 'react';
 import Block from '../containers/Block';
 
 function Blockchain(props) {
-  const { blocks, blocksById, totalBlocks, eosClient } = props;
-  const isLoading = blocks.length < totalBlocks;
+  const { blocks, blocksById, eosClient, isFetchingBlocks } = props;
   const rows = blocks.map((id) => (
     <Block block={blocksById[id]} key={id} eosClient={eosClient} />
   ));
@@ -20,7 +19,7 @@ function Blockchain(props) {
       <div>
         {rows}
       </div>
-      {isLoading && spinner}
+      {isFetchingBlocks && spinner}
     </div>
   );
 }

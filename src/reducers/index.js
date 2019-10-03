@@ -12,7 +12,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-
     // When requesting new blocks, reset the blocks and set isFetchingBlocks to true
     case REQUEST_BLOCKS:
       return {
