@@ -1,5 +1,4 @@
-import Mustache from 'mustache';
-import MarkdownIt from 'markdown-it';
+import * as markstache from '../util/markstache';
 
 export const RECEIVED_BLOCK = 'RECEIVED_BLOCK';
 export const REQUEST_BLOCKS = 'REQUEST_BLOCKS';
@@ -53,30 +52,16 @@ export const requestBlocks = (args) => {
   return { type: REQUEST_BLOCKS };
 };
 
-const md = new MarkdownIt();
-
-const renderContract = (contract, data) => {
-  try {
-    return md.render(Mustache.render(contract, data));
-  } catch (err) {
-    console.log('ERROR: failed to render contract');
-    console.log(err);
-    return '';
-  }
-};
-
 const fetchDetails = async (dispatch, block, eosClient) => {
   const { actions, isFetchingDetails } = block;
   if (isFetchingDetails) return;
 
   for (let i = 0; i < actions.length; i++) {
     const action = actions[i];
-    if (action.contract) continue;
     const abi = await eosClient.getAbi(action.account);
     const contract = abi.contracts[action.name];
     if (contract) {
-      action.contract = renderContract(contract, action.data);
-      const renderedContract = renderContract(contract, action.data);
+      const renderedContract = markstache.render(contract, action.data);
       dispatch(receivedDetail(block.id, i, renderedContract));
     }
   }
