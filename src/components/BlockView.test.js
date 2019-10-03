@@ -10,7 +10,7 @@ test('Block renders properly', () => {
     actions: [],
   };
   const blockView = shallow(
-    <BlockView block={block} onClick={jest.fn()}/>
+    <BlockView block={block} onClick={jest.fn()} />
   );
   expect(
     blockView.find('.eos-block').first().find(BlockEntry).map((node) => ({
@@ -26,7 +26,7 @@ test('Block renders properly', () => {
   );
 });
 
-test('Block renders with details', () => {
+test('Block renders properly with details', () => {
   const block = {
     id: '100',
     timestamp: '2020-10-30',
@@ -92,7 +92,7 @@ test('Block renders with details', () => {
   ]);
 });
 
-test('Block renders without details', () => {
+test('Block renders properly without details', () => {
   const block = {
     id: '100',
     timestamp: '2020-10-30',
