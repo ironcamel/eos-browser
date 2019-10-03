@@ -61,11 +61,11 @@ class EosClient {
   _retry = async (fun) => {
     let numRetries = 0;
     let resource;
-    while (!resource && numRetries < this.maxRetries) {
+    while (!resource && numRetries <= this.maxRetries) {
       try {
         resource = await fun();
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         numRetries++;
         await this._wait(this.retryDelay);
       }
