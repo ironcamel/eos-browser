@@ -7,7 +7,7 @@ import App from './containers/App';
 import EosClient from './util/eos-client';
 import reducer from './reducers';
 import './index.css';
-import config from './config.js';
+import config from './config';
 
 // Inject a store and eosClient into the app
 

@@ -25,29 +25,17 @@ class EosClient {
     }
     const prevBlock = await this.getBlock(blockId);
     prevBlock.actions = [];
-    this.processBlock(prevBlock);
+    this._processBlock(prevBlock);
     return prevBlock;
   }
 
-  processBlock = (block) => {
-    block.actions = [];
-    block.transactions.forEach((t) => {
-      if (typeof t.trx === 'object') {
-        const { actions } = t.trx.transaction;
-        block.actions.push(...actions);
-      }
-    });
-  };
+  getInfo = async () => this._retry(() => this.rpc.get_info());
 
-  wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  getInfo = () => this.retry(() => this.rpc.get_info());
-
-  getBlock = (blockId) => this.retry(() => this.rpc.get_block(blockId));
+  getBlock = async (blockId) => this._retry(() => this.rpc.get_block(blockId));
 
   getAbi = async (account) => {
     if (this.abiCache[account]) return this.abiCache[account];
-    const abi = await this.retry(async () => this.rpc.get_abi(account));
+    const abi = await this._retry(async () => this.rpc.get_abi(account));
     abi.contracts = {};
     if (abi.abi) {
       abi.abi.actions.forEach((action) => {
@@ -58,16 +46,28 @@ class EosClient {
     return abi;
   };
 
-  retry = async (fun) => {
+  _processBlock = (block) => {
+    block.actions = [];
+    block.transactions.forEach((t) => {
+      if (typeof t.trx === 'object') {
+        const { actions } = t.trx.transaction;
+        block.actions.push(...actions);
+      }
+    });
+  };
+
+  _wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  _retry = async (fun) => {
     let numRetries = 0;
     let resource;
     while (!resource && numRetries < this.maxRetries) {
       try {
         resource = await fun();
       } catch (err) {
+        console.log(err);
         numRetries++;
-        // console.log(`ERROR !!!!!!!!! retry: ${numRetries}`);
-        await this.wait(this.retryDelay);
+        await this._wait(this.retryDelay);
       }
     }
     return resource;

@@ -8,7 +8,7 @@ test('Block renders properly', () => {
     id: '100',
     timestamp: '2020-10-30',
     actions: [],
-  }
+  };
   const blockView = shallow(
     <BlockView block={block} onClick={jest.fn()}/>
   );
@@ -21,7 +21,7 @@ test('Block renders properly', () => {
     [
       { label: 'hash', value: '100' },
       { label: 'timestamp', value: '2020-10-30' },
-      { label: 'actions', value: 0 }
+      { label: 'actions', value: 0 },
     ]
   );
 });
@@ -43,7 +43,7 @@ test('Block renders with details', () => {
       },
     ],
     showDetails: true,
-  }
+  };
   const blockView = shallow(
     <BlockView block={block} onClick={jest.fn()}/>
   );
@@ -90,7 +90,6 @@ test('Block renders with details', () => {
     'contract1',
     'contract2',
   ]);
-
 });
 
 test('Block renders without details', () => {
@@ -99,7 +98,7 @@ test('Block renders without details', () => {
     timestamp: '2020-10-30',
     actions: [],
     showDetails: false,
-  }
+  };
   const blockView = shallow(
     <BlockView block={block} onClick={jest.fn()}/>
   );
