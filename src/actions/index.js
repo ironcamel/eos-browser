@@ -1,3 +1,6 @@
+import Mustache from 'mustache';
+import MarkdownIt from 'markdown-it';
+
 export const RECEIVED_BLOCK = 'RECEIVED_BLOCK';
 export const REQUEST_BLOCKS = 'REQUEST_BLOCKS';
 export const DONE_FETCHING_BLOCKS = 'DONE_FETCHING_BLOCKS';
@@ -13,11 +16,6 @@ export const receivedBlock = (block) => ({
 
 export const doneBlocks = () => ({
   type: DONE_FETCHING_BLOCKS,
-});
-
-export const requestDetails = (blockId) => ({
-  type: REQUEST_DETAILS,
-  blockId,
 });
 
 export const receivedDetail = (blockId, actionIdx, contract) => ({
@@ -53,4 +51,41 @@ const fetchBlocks = async (args) => {
 export const requestBlocks = (args) => {
   fetchBlocks(args);
   return { type: REQUEST_BLOCKS };
+};
+
+const md = new MarkdownIt();
+
+const renderContract = (contract, data) => {
+  try {
+    return md.render(Mustache.render(contract, data));
+  } catch (err) {
+    console.log('ERROR: failed to render contract');
+    console.log(err);
+    return '';
+  }
+};
+
+const fetchDetails = async (dispatch, block, eosClient) => {
+  const { actions, isFetchingDetails } = block;
+  if (isFetchingDetails) return;
+
+  for (let i = 0; i < actions.length; i++) {
+    const action = actions[i];
+    if (action.contract) continue;
+    const abi = await eosClient.getAbi(action.account);
+    const contract = abi.contracts[action.name];
+    if (contract) {
+      action.contract = renderContract(contract, action.data);
+      const renderedContract = renderContract(contract, action.data);
+      dispatch(receivedDetail(block.id, i, renderedContract));
+    }
+  }
+};
+
+export const requestDetails = (dispatch, block, eosClient) => {
+  fetchDetails(dispatch, block, eosClient);
+  return {
+    type: REQUEST_DETAILS,
+    blockId: block.id,
+  };
 };

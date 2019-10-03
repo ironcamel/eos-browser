@@ -15,14 +15,6 @@ test('doneBlocks', () => {
   });
 });
 
-test('requestDetails', () => {
-  const action = actions.requestDetails(123);
-  expect(action).toEqual({
-    type: 'REQUEST_DETAILS',
-    blockId: 123,
-  });
-});
-
 test('receivedDetail', () => {
   const action = actions.receivedDetail(1, 2, 3);
   expect(action).toEqual({
@@ -34,10 +26,10 @@ test('receivedDetail', () => {
 });
 
 test('toggleDetails', () => {
-  const action = actions.toggleDetails(123);
+  const action = actions.toggleDetails('123');
   expect(action).toEqual({
     type: 'TOGGLE_DETAILS',
-    blockId: 123,
+    blockId: '123',
   });
 });
 
@@ -54,5 +46,14 @@ test('requestBlocks', () => {
   const action = actions.requestBlocks(args);
   expect(action).toEqual({
     type: 'REQUEST_BLOCKS',
+  });
+});
+
+test('requestDetails', () => {
+  const block = { id: 'id100', isFetchingDetails: true };
+  const action = actions.requestDetails(jest.fn(), block, {});
+  expect(action).toEqual({
+    type: 'REQUEST_DETAILS',
+    blockId: 'id100',
   });
 });

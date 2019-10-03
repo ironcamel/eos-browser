@@ -880,6 +880,7 @@ caption {
 .button:disabled {
   background-color: gray;
   border-color: gray;
+  cursor: auto;
 }
 
 select.load {
