@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/eos-browser/static/css/main.7321a52e.chunk.css",
-    "main.js": "/eos-browser/static/js/main.686afcea.chunk.js",
-    "main.js.map": "/eos-browser/static/js/main.686afcea.chunk.js.map",
+    "main.css": "/eos-browser/static/css/main.56bb0375.chunk.css",
+    "main.js": "/eos-browser/static/js/main.1ea09882.chunk.js",
+    "main.js.map": "/eos-browser/static/js/main.1ea09882.chunk.js.map",
     "runtime-main.js": "/eos-browser/static/js/runtime-main.6017814e.js",
     "runtime-main.js.map": "/eos-browser/static/js/runtime-main.6017814e.js.map",
-    "static/js/2.b1c80774.chunk.js": "/eos-browser/static/js/2.b1c80774.chunk.js",
-    "static/js/2.b1c80774.chunk.js.map": "/eos-browser/static/js/2.b1c80774.chunk.js.map",
+    "static/js/2.ec604f74.chunk.js": "/eos-browser/static/js/2.ec604f74.chunk.js",
+    "static/js/2.ec604f74.chunk.js.map": "/eos-browser/static/js/2.ec604f74.chunk.js.map",
     "index.html": "/eos-browser/index.html",
-    "precache-manifest.e808321d06ec562f78c19605813e71c7.js": "/eos-browser/precache-manifest.e808321d06ec562f78c19605813e71c7.js",
+    "precache-manifest.300f17c4442570632d0196076bf59e77.js": "/eos-browser/precache-manifest.300f17c4442570632d0196076bf59e77.js",
     "service-worker.js": "/eos-browser/service-worker.js",
-    "static/css/main.7321a52e.chunk.css.map": "/eos-browser/static/css/main.7321a52e.chunk.css.map"
+    "static/css/main.56bb0375.chunk.css.map": "/eos-browser/static/css/main.56bb0375.chunk.css.map"
   }
 }
