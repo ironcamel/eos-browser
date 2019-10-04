@@ -57,3 +57,38 @@ test('requestDetails', () => {
     blockId: 'id100',
   });
 });
+
+test('requestDetails2', () => {
+  expect.assertions(3);
+  const block = {
+    id: 'id100',
+    isFetchingDetails: false,
+    actions: [{
+      name: 'foo',
+      account: 'account100',
+      data: {},
+    }],
+  };
+  const eosClient = {
+    getAbi: jest.fn().mockImplementation((account) => {
+      expect(account).toBe('account100');
+      return { contracts: { foo: '# contract100' } };
+    }),
+  }
+  return new Promise((resolve) => {
+    const dispatch = jest.fn().mockImplementation((action) => {
+      expect(action).toEqual({
+        type: 'RECEIVED_DETAIL',
+        blockId: 'id100',
+        actionIdx: 0,
+        contract: '<h1>contract100</h1>\n',
+      });
+      resolve(action);
+    });
+    const action = actions.requestDetails(dispatch, block, eosClient);
+    expect(action).toEqual({
+      type: 'REQUEST_DETAILS',
+      blockId: 'id100',
+    });
+  });
+});
