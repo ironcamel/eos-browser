@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 import BlockEntry from './BlockEntry';
 
 class BlockView extends Component {
-  componentDidUpdate(prevProps) {
-    const { dispatch, block, eosClient, requestDetails } = this.props;
-    const prevShowDetails = prevProps.block.showDetails;
-    const { showDetails } = this.props.block;
-    if ((prevShowDetails !== showDetails) && showDetails) {
-      requestDetails(dispatch, block, eosClient);
-    }
-  }
-
   render() {
     const { block, toggleDetails } = this.props;
 

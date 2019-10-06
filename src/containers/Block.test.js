@@ -8,18 +8,15 @@ import reducer from '../reducers';
 const store = createStore(reducer);
 
 test('Block properly connects to BlockView props', () => {
-  const blockData = { id: '100' };
+  const blockData = { id: '100', actions: [] };
   const block = shallow(
     <Block block={blockData} eosClient={{ client: 'foo' }} store={store} />
-  );
+  ).shallow({disableLifecycleMethods: true});
+
   const blockView = block.find(BlockView);
   expect(blockView).toHaveLength(1);
   expect(blockView.props()).toMatchObject({
     block: { id: '100' },
-    eosClient: { client: 'foo' },
     toggleDetails: expect.any(Function),
-    requestDetails: expect.any(Function),
-    dispatch: expect.any(Function),
-    store,
   });
 });
