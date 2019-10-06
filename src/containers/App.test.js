@@ -7,10 +7,11 @@ import reducer from '../reducers';
 
 const store = createStore(reducer);
 
-test('App properly connects to AppView props', () => {
+test('App container properly sets AppView props', () => {
   const app = shallow(
     <App eosClient={{ client: 'foo' }} store={store} />
-  );
+  ).shallow().shallow({disableLifecycleMethods: true});
+
   const appView = app.find(AppView);
   expect(appView).toHaveLength(1);
   expect(appView.props()).toMatchObject({
@@ -22,6 +23,5 @@ test('App properly connects to AppView props', () => {
     requestBlocks: expect.any(Function),
     setTotalBlocks: expect.any(Function),
     dispatch: expect.any(Function),
-    store,
   });
 });

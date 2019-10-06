@@ -28,6 +28,7 @@ module.exports = {
     'no-continue': 'off',
     'no-param-reassign': 'off',
     'no-plusplus': 'off',
+    'no-underscore-dangle': 'off',
     'object-curly-newline': 'off',
     'one-var-declaration-per-line': 'off',
     'one-var': 'off',

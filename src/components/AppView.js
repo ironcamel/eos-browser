@@ -2,18 +2,6 @@ import React, { Component } from 'react';
 import Blockchain from './Blockchain';
 
 class AppView extends Component {
-  componentDidMount() {
-    const { requestBlocks } = this.props;
-    requestBlocks(this.props);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { requestBlocks } = this.props;
-    if (prevProps.totalBlocks !== this.props.totalBlocks) {
-      requestBlocks(this.props);
-    }
-  }
-
   render() {
     const {
       blocks,
