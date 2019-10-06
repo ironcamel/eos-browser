@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import BlockEntry from './BlockEntry';
 
-class BlockView extends Component {
+class BlockView extends PureComponent {
   render() {
     const { block, toggleDetails } = this.props;
 
